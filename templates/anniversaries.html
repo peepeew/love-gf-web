@@ -16,8 +16,12 @@
   <h1>我们的纪念日💖</h1>
   <a href="/anniversary/add">➕ 添加纪念日</a>
   {% for a in anniversaries %}
-    <div class="card" style="background-image: url('{{ a.bg_image or '' }}'); background-size: cover;">
-      <div class="title">📅 {{ a.title }}（{{ a.date }}）</div>
+    {% if a.bg_image %}
+      <div class="card" style="background-image: url('{{ a.bg_image }}'); background-size: cover;">
+    {% else %}
+      <div class="card">
+    {% endif %}
+      <div class="title">📅 {{ a.title }}（{{ a.date or '未填写日期' }}）</div>
       {% if a.days_left > 0 %}
         <div class="days">还有 {{ a.days_left }} 天</div>
       {% elif a.days_left == 0 %}

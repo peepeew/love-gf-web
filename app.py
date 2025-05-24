@@ -50,23 +50,24 @@ def anniversaries():
 
     # 加计算天数字段（兼容 str/date/datetime）
     for a in all_days:
-        raw_date = a["date"]
-        if isinstance(raw_date, str):
+        raw_date = a.get("date")  # 更稳健
+        if raw_date is None:
+            d = date.today()
+        elif isinstance(raw_date, str):
             try:
                 d = datetime.strptime(raw_date, "%Y-%m-%d").date()
             except ValueError:
                 d = date.today()
-        elif isinstance(raw_date, date):
-            d = raw_date
         elif isinstance(raw_date, datetime):
             d = raw_date.date()
+        elif isinstance(raw_date, date):
+            d = raw_date
         else:
             d = date.today()
 
         a["days_left"] = days_diff(d)
 
     return render_template("anniversaries.html", anniversaries=all_days)
-
 
 # 添加纪念日页面 + 表单提交
 @app.route("/anniversary/add", methods=["GET", "POST"])
@@ -79,7 +80,6 @@ def add_anniversary():
 
         if title and date_str:
             try:
-                # 👇 转换为标准日期格式
                 date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
                 iso_date = date_obj.isoformat()
 
@@ -88,7 +88,7 @@ def add_anniversary():
                     "date": iso_date,
                     "note": note,
                     "creator": creator,
-                    "bg_image": None
+                    "bg_image": None  # 暂无背景图，字段预留
                 }).execute()
             except Exception as e:
                 print("插入纪念日失败：", e)
@@ -96,7 +96,6 @@ def add_anniversary():
         return redirect(url_for("anniversaries"))
 
     return render_template("add_anniversary.html")
-
 
 # 删除纪念日（不限制是谁删的，可根据 creator 加限制）
 @app.route("/anniversary/delete/<int:id>")
