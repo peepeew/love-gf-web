@@ -134,6 +134,26 @@ def submit():
 
     return render_template("submit.html")
 
+app.route("/love-words", methods=["GET", "POST"])
+def love_words():
+    if request.method == "POST":
+        content = request.form.get("content", "").strip()
+        if content:
+            try:
+                supabase.table("love_words").insert({"content": content}).execute()
+            except Exception as e:
+                print("插入情话失败：", e)
+        return redirect(url_for("love_words"))
+
+    try:
+        response = supabase.table("love_words").select("*").execute()
+        words = response.data
+    except Exception as e:
+        print("拉取情话失败：", e)
+        words = []
+
+    return render_template("love_words.html", words=words)
+
 @app.route("/messages")
 def messages():
     try:

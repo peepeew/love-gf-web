@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>💌 情话弹幕</title>
+  <style>
+    body { background: black; color: white; overflow: hidden; font-family: sans-serif; }
+    form { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 10; }
+    input[type="text"] { padding: 8px; width: 300px; border-radius: 8px; border: none; }
+    button { padding: 8px 16px; border-radius: 8px; border: none; background: deeppink; color: white; cursor: pointer; }
+    .word {
+      position: absolute;
+      white-space: nowrap;
+      font-size: 20px;
+      color: pink;
+      animation: fly 10s linear infinite;
+    }
+    @keyframes fly {
+      0% { left: 100vw; opacity: 1; }
+      100% { left: -100vw; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <form method="POST">
+    <input type="text" name="content" placeholder="写下一句情话...">
+    <button type="submit">发送</button>
+  </form>
+
+  <script>
+    const lines = {{ words|tojson }};
+    function createDanmu(text) {
+      const span = document.createElement("span");
+      span.className = "word";
+      span.textContent = text;
+      span.style.top = Math.random() * 90 + "vh";
+      span.style.fontSize = (16 + Math.random() * 10) + "px";
+      document.body.appendChild(span);
+      setTimeout(() => span.remove(), 10000);
+    }
+    setInterval(() => {
+      if (lines.length > 0) {
+        const rand = Math.floor(Math.random() * lines.length);
+        createDanmu(lines[rand].content);
+      }
+    }, 1200);
+  </script>
+</body>
+</html>
