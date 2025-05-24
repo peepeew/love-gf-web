@@ -79,13 +79,13 @@ def add_anniversary():
 
         if title and date_str:
             try:
-                # ✅ 将日期字符串转为日期对象，再转为 ISO 字符串（"YYYY-MM-DD"）
+                # 👇 转换为标准日期格式
                 date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
                 iso_date = date_obj.isoformat()
 
                 supabase.table("anniversaries").insert({
                     "title": title,
-                    "date": iso_date,  # 这样 Postgres 能识别
+                    "date": iso_date,
                     "note": note,
                     "creator": creator,
                     "bg_image": None
@@ -96,6 +96,7 @@ def add_anniversary():
         return redirect(url_for("anniversaries"))
 
     return render_template("add_anniversary.html")
+
 
 # 删除纪念日（不限制是谁删的，可根据 creator 加限制）
 @app.route("/anniversary/delete/<int:id>")
