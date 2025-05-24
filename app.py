@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, render_template, redirect, url_for, session
-from datetime import datetime
+from datetime import datetime, date
 from supabase import create_client
 from dotenv import load_dotenv
 
@@ -38,9 +38,56 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
-@app.route("/anniversary")
-def anniversary():
-    return render_template("anniversary.html")
+@app.route("/anniversaries")
+def anniversaries():
+    try:
+        response = supabase.table("anniversaries").select("*").order("date", desc=False).execute()
+        all_days = response.data
+    except Exception as e:
+        print("拉取纪念日失败：", e)
+        all_days = []
+
+    # 加计算天数字段
+    for a in all_days:
+        d = datetime.strptime(a["date"], "%Y-%m-%d").date()
+        a["days_left"] = days_diff(d)
+
+    return render_template("anniversaries.html", anniversaries=all_days)
+
+# 添加纪念日页面 + 表单提交
+@app.route("/anniversary/add", methods=["GET", "POST"])
+def add_anniversary():
+    if request.method == "POST":
+        title = request.form.get("title", "无标题").strip()
+        date_str = request.form.get("date", "")
+        note = request.form.get("note", "").strip()
+        creator = request.form.get("creator", "TA")
+
+        if title and date_str:
+            try:
+                supabase.table("anniversaries").insert({
+                    "title": title,
+                    "date": date_str,
+                    "note": note,
+                    "creator": creator,
+                    "bg_image": None  # 暂无背景图，字段预留
+                }).execute()
+            except Exception as e:
+                print("插入纪念日失败：", e)
+
+        return redirect(url_for("anniversaries"))
+
+    return render_template("add_anniversary.html")
+
+# 删除纪念日（不限制是谁删的，可根据 creator 加限制）
+@app.route("/anniversary/delete/<int:id>")
+def delete_anniversary(id):
+    try:
+        supabase.table("anniversaries").delete().eq("id", id).execute()
+    except Exception as e:
+        print("删除失败：", e)
+    return redirect(url_for("anniversaries"))
+
 
 @app.route("/submit", methods=["GET", "POST"])
 def submit():

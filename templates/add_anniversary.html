@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>添加纪念日</title>
+  <style>
+    body { background: #fffaf0; font-family: sans-serif; text-align: center; padding: 40px; }
+    form { display: inline-block; text-align: left; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 10px; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; }
+    button { margin-top: 20px; padding: 10px 20px; background-color: deeppink; color: white; border: none; border-radius: 10px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>添加一个特别的日子 💕</h1>
+  <form method="POST">
+    <label>标题：<input type="text" name="title" required></label>
+    <label>日期：<input type="date" name="date" required></label>
+    <label>备注（可选）：<textarea name="note"></textarea></label>
+    <label>你的名字：<input type="text" name="creator"></label>
+    <button type="submit">提交</button>
+  </form>
+</body>
+</html>
