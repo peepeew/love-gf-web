@@ -1,28 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <title>写给你的悄悄话</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: 'Arial', sans-serif;
-            background: mistyrose;
-            margin-top: 100px;
-        }
-        h1 {
-            color: deeppink;
-            animation: pop 1s infinite alternate;
-        }
-        @keyframes pop {
-            from { transform: scale(1); }
-            to { transform: scale(1.05); }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>给猪哥最爱的凤梨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: mistyrose;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    h1 {
+      color: deeppink;
+      font-size: 2em;
+      animation: heartbeat 1.5s infinite;
+    }
+    p {
+      font-size: 1.2em;
+      color: #444;
+      margin-top: 20px;
+    }
+    #love-time {
+      font-size: 1.1em;
+      margin-top: 30px;
+      color: #555;
+    }
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
-    <h1>❤️ 亲爱的凤梨，我想对你说 ❤️</h1>
-    <p style="font-size: 20px;">我不知道未来会怎样，但我想和你一起走下去。</p>
-    <p style="margin-top: 50px;">—— 你的猪哥</p>
+  <h1>❤️ 给我最爱的你 ❤️</h1>
+
+  <p>我不知道未来会怎样，但我知道，我想和你一起走下去。</p>
+  <p>不管你在哪，我的心都会在你身边。</p>
+
+  <p id="love-time"></p>
+
+  <script>
+    // ❤️ 设置纪念日时间（在一起的那天）
+    const startDate = new Date("2025-05-02T00:00:00");
+
+    function updateLoveTime() {
+      const now = new Date();
+      let delta = Math.floor((now - startDate) / 1000); // 秒差
+
+      const years = Math.floor(delta / (365 * 24 * 3600));
+      delta %= 365 * 24 * 3600;
+
+      const months = Math.floor(delta / (30 * 24 * 3600));
+      delta %= 30 * 24 * 3600;
+
+      const days = Math.floor(delta / (24 * 3600));
+      delta %= 24 * 3600;
+
+      const hours = Math.floor(delta / 3600);
+      delta %= 3600;
+
+      const minutes = Math.floor(delta / 60);
+      const seconds = delta % 60;
+
+      const text = `我们已经在一起：${years}年 ${months}个月 ${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒了 ❤️`;
+      document.getElementById("love-time").textContent = text;
+    }
+
+    updateLoveTime();
+    setInterval(updateLoveTime, 1000);
+  </script>
 </body>
 </html>
