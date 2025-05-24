@@ -1,22 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-  <meta charset="utf-8">
-  <title>输入暗号</title>
-  <p style="text-align:center;font-size:14px;color:#888">暗号是属于我们的浪漫数字 💕</p>
+  <meta charset="UTF-8">
+  <title>给我最爱的你</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body{display:flex;justify-content:center;align-items:center;height:100vh;background:#ffeef2;font-family:sans-serif}
-    form{background:#fff;padding:2rem 3rem;border-radius:1rem;box-shadow:0 0 10px rgba(0,0,0,.1)}
-    input{padding:.6rem 1rem;font-size:1rem;border:1px solid #ddd;border-radius:.5rem;width:100%}
-    button{margin-top:1rem;padding:.6rem 1rem;font-size:1rem;border:none;border-radius:.5rem;background:#ff6fa4;color:#fff;cursor:pointer;width:100%}
+    body {
+      background: mistyrose;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    h1 {
+      color: deeppink;
+      font-size: 2em;
+      animation: heartbeat 1.5s infinite;
+    }
+    p {
+      font-size: 1.2em;
+      color: #444;
+      margin-top: 20px;
+    }
+    #love-time {
+      font-size: 1.1em;
+      margin-top: 30px;
+      color: #555;
+    }
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
-  <form method="POST">
-    <h2 style="text-align:center">请输入暗号</h2>
-    {% if error %}<p style="color:red">{{ error }}</p>{% endif %}
-    <input type="password" name="password" placeholder="暗号">
-    <button type="submit">进入</button>
-  </form>
+  <h1>❤️ 给我最爱的你 ❤️</h1>
+
+  <p>我不知道未来会怎样，但我知道，我想和你一起走下去。</p>
+  <p>不管你在哪，我的心都会在你身边。</p>
+
+  <p id="love-time"></p>
+
+  <script>
+    // ❤️ 设置纪念日时间（在一起的那天）
+    const startDate = new Date("2025-05-02T00:00:00");
+
+    function updateLoveTime() {
+      const now = new Date();
+      let delta = Math.floor((now - startDate) / 1000); // 秒差
+
+      const years = Math.floor(delta / (365 * 24 * 3600));
+      delta %= 365 * 24 * 3600;
+
+      const months = Math.floor(delta / (30 * 24 * 3600));
+      delta %= 30 * 24 * 3600;
+
+      const days = Math.floor(delta / (24 * 3600));
+      delta %= 24 * 3600;
+
+      const hours = Math.floor(delta / 3600);
+      delta %= 3600;
+
+      const minutes = Math.floor(delta / 60);
+      const seconds = delta % 60;
+
+      const text = `我们已经在一起：${years}年 ${months}个月 ${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒了 ❤️`;
+      document.getElementById("love-time").textContent = text;
+    }
+
+    updateLoveTime();
+    setInterval(updateLoveTime, 1000);
+  </script>
 </body>
 </html>
