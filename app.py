@@ -17,6 +17,10 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+
+# 添加查看全部纪念日页面
+days_diff = lambda d: (d - date.today()).days
+
 @app.route("/")
 def home():
     if not session.get("auth_ok"):
@@ -38,6 +42,7 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
 
 @app.route("/anniversaries")
 def anniversaries():
@@ -87,8 +92,7 @@ def add_anniversary():
                     "title": title,
                     "date": iso_date,
                     "note": note,
-                    "creator": creator,
-                    "bg_image": None  # 暂无背景图，字段预留
+                    "creator": creator
                 }).execute()
             except Exception as e:
                 print("插入纪念日失败：", e)
