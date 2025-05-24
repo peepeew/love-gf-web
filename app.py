@@ -38,7 +38,7 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
-@app.route("/anniversary")
+@app.route("/anniversaries")
 def anniversaries():
     try:
         response = supabase.table("anniversaries").select("*").order("date", desc=False).execute()
@@ -47,12 +47,25 @@ def anniversaries():
         print("拉取纪念日失败：", e)
         all_days = []
 
-    # 加计算天数字段
+    # 加计算天数字段（兼容 str/date/datetime）
     for a in all_days:
-        d = datetime.strptime(a["date"], "%Y-%m-%d").date()
+        raw_date = a["date"]
+        if isinstance(raw_date, str):
+            try:
+                d = datetime.strptime(raw_date, "%Y-%m-%d").date()
+            except ValueError:
+                d = date.today()
+        elif isinstance(raw_date, date):
+            d = raw_date
+        elif isinstance(raw_date, datetime):
+            d = raw_date.date()
+        else:
+            d = date.today()
+
         a["days_left"] = days_diff(d)
 
     return render_template("anniversaries.html", anniversaries=all_days)
+
 
 # 添加纪念日页面 + 表单提交
 @app.route("/anniversary/add", methods=["GET", "POST"])
