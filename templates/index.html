@@ -10,6 +10,7 @@
       font-family: 'Segoe UI', sans-serif;
       text-align: center;
       padding: 50px 20px;
+      overflow: hidden;
     }
     h1 {
       color: deeppink;
@@ -31,6 +32,19 @@
       50% { transform: scale(1.08); }
       100% { transform: scale(1); }
     }
+
+    .heart {
+      position: fixed;
+      top: -10px;
+      font-size: 16px;
+      color: hotpink;
+      animation: fall 8s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -41,13 +55,16 @@
 
   <p id="love-time"></p>
 
+  <!-- 🎵 背景音乐播放器 -->
+  <audio id="bgm" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fce5b9bf98.mp3?filename=love-11097.mp3" autoplay loop></audio>
+
   <script>
-    // ❤️ 设置纪念日时间（在一起的那天）
+    // ❤️ 设置纪念日时间
     const startDate = new Date("2025-05-02T00:00:00");
 
     function updateLoveTime() {
       const now = new Date();
-      let delta = Math.floor((now - startDate) / 1000); // 秒差
+      let delta = Math.floor((now - startDate) / 1000);
 
       const years = Math.floor(delta / (365 * 24 * 3600));
       delta %= 365 * 24 * 3600;
@@ -70,6 +87,24 @@
 
     updateLoveTime();
     setInterval(updateLoveTime, 1000);
+
+    // 💕 心形飘落动画
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "❤";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (12 + Math.random() * 20) + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+
+    setInterval(createHeart, 300);
+
+    // 🎵 微信浏览器兼容自动播放背景音乐
+    document.addEventListener("WeixinJSBridgeReady", function () {
+      document.getElementById("bgm").play();
+    }, false);
   </script>
 </body>
 </html>
