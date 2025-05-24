@@ -38,7 +38,7 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
-@app.route("/anniversaries")
+@app.route("/anniversary")
 def anniversaries():
     try:
         response = supabase.table("anniversaries").select("*").order("date", desc=False).execute()
