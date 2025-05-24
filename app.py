@@ -76,22 +76,28 @@ def add_anniversary():
         note = request.form.get("note", "").strip()
         creator = request.form.get("creator", "TA")
 
+        print(f"收到表单：{title}, {date_str}, {note}, {creator}")
+
         if title and date_str:
             try:
-                supabase.table("anniversaries").insert({
+                # 👇 转换字符串为 date 对象
+                date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+                response = supabase.table("anniversaries").insert({
                     "title": title,
-                    "date": date_str,
+                    "date": date_obj.isoformat(),  # 明确是 yyyy-mm-dd 字符串
                     "note": note,
                     "creator": creator,
-                    "bg_image": None  # 暂无背景图，字段预留
+                    "bg_image": None
                 }).execute()
+
+                print("插入成功：", response)
             except Exception as e:
                 print("插入纪念日失败：", e)
 
         return redirect(url_for("anniversaries"))
 
     return render_template("add_anniversary.html")
-
 # 删除纪念日（不限制是谁删的，可根据 creator 加限制）
 @app.route("/anniversary/delete/<int:id>")
 def delete_anniversary(id):
