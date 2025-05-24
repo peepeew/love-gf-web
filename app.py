@@ -1,16 +1,22 @@
 import os
-import json
-from datetime import datetime
 from flask import Flask, request, render_template, redirect, url_for, session
+from datetime import datetime
+from supabase import create_client
+from dotenv import load_dotenv
+
+# 读取 .env 配置
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET", "change-me")  # 用于 session 加密
-APP_PASS = os.getenv("SITE_PASS", "1314502")              # 登录密码
+app.secret_key = os.getenv("FLASK_SECRET", "change-me")
+APP_PASS = os.getenv("SITE_PASS", "1314502")
 
-# 留言数据文件（本地保存 JSON）
-DATA_FILE = "messages.json"
+# Supabase 设置
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-@app.route("/", methods=["GET"])
+@app.route("/")
 def home():
     if not session.get("auth_ok"):
         return redirect(url_for("login"))
@@ -42,32 +48,16 @@ def submit():
         name = request.form.get("name", "").strip() or "某人"
         to = request.form.get("to", "").strip() or "TA"
         content = request.form.get("content", "").strip()
+        time_now = datetime.now().isoformat()
 
         if content:
-            msg = {
-                "from": name,
-                "to": to,
-                "content": content,
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-
-            # 加载旧留言（如失败则重置为空列表）
             try:
-                if os.path.exists(DATA_FILE):
-                    with open(DATA_FILE, "r", encoding="utf-8") as f:
-                        all_msgs = json.load(f)
-                else:
-                    all_msgs = []
-            except Exception as e:
-                print("读取留言失败：", e)
-                all_msgs = []
-
-            all_msgs.append(msg)
-
-            # 写入新留言
-            try:
-                with open(DATA_FILE, "w", encoding="utf-8") as f:
-                    json.dump(all_msgs, f, ensure_ascii=False, indent=2)
+                supabase.table("messages").insert({
+                    "from": name,
+                    "to": to,
+                    "content": content,
+                    "timestamp": time_now
+                }).execute()
             except Exception as e:
                 print("写入留言失败：", e)
 
@@ -78,13 +68,10 @@ def submit():
 @app.route("/messages")
 def messages():
     try:
-        if os.path.exists(DATA_FILE):
-            with open(DATA_FILE, "r", encoding="utf-8") as f:
-                all_msgs = json.load(f)
-        else:
-            all_msgs = []
+        response = supabase.table("messages").select("*").order("timestamp", desc=True).execute()
+        all_msgs = response.data
     except Exception as e:
-        print("加载 messages.json 失败：", e)
+        print("读取留言失败：", e)
         all_msgs = []
 
-    return render_template("messages.html", messages=all_msgs[::-1])
+    return render_template("messages.html", messages=all_msgs)
