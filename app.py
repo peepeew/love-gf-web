@@ -6,8 +6,9 @@ from dotenv import load_dotenv
 
 # 读取 .env 配置
 load_dotenv()
-
 app = Flask(__name__)
+app.debug = True
+
 app.secret_key = os.getenv("FLASK_SECRET", "change-me")
 APP_PASS = os.getenv("SITE_PASS", "1314502")
 
@@ -76,28 +77,26 @@ def add_anniversary():
         note = request.form.get("note", "").strip()
         creator = request.form.get("creator", "TA")
 
-        print(f"收到表单：{title}, {date_str}, {note}, {creator}")
-
         if title and date_str:
             try:
-                # 👇 转换字符串为 date 对象
+                # ✅ 将日期字符串转为日期对象，再转为 ISO 字符串（"YYYY-MM-DD"）
                 date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
+                iso_date = date_obj.isoformat()
 
-                response = supabase.table("anniversaries").insert({
+                supabase.table("anniversaries").insert({
                     "title": title,
-                    "date": date_obj.isoformat(),  # 明确是 yyyy-mm-dd 字符串
+                    "date": iso_date,  # 这样 Postgres 能识别
                     "note": note,
                     "creator": creator,
                     "bg_image": None
                 }).execute()
-
-                print("插入成功：", response)
             except Exception as e:
                 print("插入纪念日失败：", e)
 
         return redirect(url_for("anniversaries"))
 
     return render_template("add_anniversary.html")
+
 # 删除纪念日（不限制是谁删的，可根据 creator 加限制）
 @app.route("/anniversary/delete/<int:id>")
 def delete_anniversary(id):
