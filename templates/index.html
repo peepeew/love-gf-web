@@ -45,6 +45,29 @@
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
+
+    /* 🔘 功能按钮样式 */
+    .nav-buttons {
+      margin-top: 50px;
+    }
+    .nav-buttons a {
+      text-decoration: none;
+    }
+    .nav-buttons button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background-color: hotpink;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .nav-buttons button:hover {
+      transform: scale(1.05);
+      background-color: deeppink;
+    }
   </style>
 </head>
 <body>
@@ -57,25 +80,13 @@
 
   <!-- 🎵 背景音乐播放器 -->
   <audio id="bgm" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fce5b9bf98.mp3?filename=love-11097.mp3" autoplay loop></audio>
-<div style="margin-top: 50px;">
-  <a href="/submit" style="text-decoration: none;">
-    <button style="margin: 10px; padding: 10px 20px; font-size: 16px; border: none; border-radius: 10px; background-color: hotpink; color: white; cursor: pointer;">
-      💌 留一句话
-    </button>
-  </a>
 
-  <a href="/messages" style="text-decoration: none;">
-    <button style="margin: 10px; padding: 10px 20px; font-size: 16px; border: none; border-radius: 10px; background-color: palevioletred; color: white; cursor: pointer;">
-      📖 看留言
-    </button>
-  </a>
-
-  <a href="/anniversary" style="text-decoration: none;">
-    <button style="margin: 10px; padding: 10px 20px; font-size: 16px; border: none; border-radius: 10px; background-color: mediumvioletred; color: white; cursor: pointer;">
-      ⏳ 纪念日倒计时
-    </button>
-  </a>
-</div>
+  <!-- 🔘 功能跳转入口 -->
+  <div class="nav-buttons">
+    <a href="/submit"><button>💌 留一句话</button></a>
+    <a href="/messages"><button>📖 看留言</button></a>
+    <a href="/anniversary"><button>⏳ 纪念日倒计时</button></a>
+  </div>
 
   <script>
     // ❤️ 设置纪念日时间
@@ -84,19 +95,14 @@
     function updateLoveTime() {
       const now = new Date();
       let delta = Math.floor((now - startDate) / 1000);
-
       const years = Math.floor(delta / (365 * 24 * 3600));
       delta %= 365 * 24 * 3600;
-
       const months = Math.floor(delta / (30 * 24 * 3600));
       delta %= 30 * 24 * 3600;
-
       const days = Math.floor(delta / (24 * 3600));
       delta %= 24 * 3600;
-
       const hours = Math.floor(delta / 3600);
       delta %= 3600;
-
       const minutes = Math.floor(delta / 60);
       const seconds = delta % 60;
 
