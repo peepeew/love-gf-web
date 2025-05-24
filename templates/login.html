@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>输入暗号</title>
+  <p style="text-align:center;font-size:14px;color:#888">暗号是属于我们的浪漫数字 💕</p>
+  <style>
+    body{display:flex;justify-content:center;align-items:center;height:100vh;background:#ffeef2;font-family:sans-serif}
+    form{background:#fff;padding:2rem 3rem;border-radius:1rem;box-shadow:0 0 10px rgba(0,0,0,.1)}
+    input{padding:.6rem 1rem;font-size:1rem;border:1px solid #ddd;border-radius:.5rem;width:100%}
+    button{margin-top:1rem;padding:.6rem 1rem;font-size:1rem;border:none;border-radius:.5rem;background:#ff6fa4;color:#fff;cursor:pointer;width:100%}
+  </style>
+</head>
+<body>
+  <form method="POST">
+    <h2 style="text-align:center">请输入暗号</h2>
+    {% if error %}<p style="color:red">{{ error }}</p>{% endif %}
+    <input type="password" name="password" placeholder="暗号">
+    <button type="submit">进入</button>
+  </form>
+</body>
+</html>
