@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>留言墙</title>
+  <style>
+    body {
+      background: #fff0f5;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    .msg {
+      background: white;
+      margin: 20px auto;
+      padding: 15px;
+      max-width: 500px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .msg .fromto {
+      font-weight: bold;
+      color: deeppink;
+      margin-bottom: 5px;
+    }
+    .msg .content {
+      font-size: 16px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h2>📖 你们互写的话</h2>
+  {% for msg in messages %}
+    <div class="msg">
+      <div class="fromto">{{ msg.from }} → {{ msg.to }}</div>
+      <div class="content">{{ msg.content }}</div>
+    </div>
+    <div class="time" style="color: #888; font-size: 14px; margin-top: 5px;">
+      写于 {{ msg.timestamp }}
+    </div>
+
+  {% else %}
+    <p>还没有人写留言～</p>
+  {% endfor %}
+</body>
+</html>

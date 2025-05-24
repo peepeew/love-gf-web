@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>写一句话</title>
+  <style>
+    body {
+      background: mistyrose;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    textarea {
+      width: 90%;
+      height: 150px;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    input[type="text"] {
+      margin-top: 15px;
+      font-size: 16px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 80%;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: deeppink;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>💌 留一句话</h2>
+  <form method="POST">
+    <textarea name="content" placeholder="想说什么..."></textarea><br>
+    <input type="text" name="name" placeholder="你是谁（比如：猪哥、凤梨）"><br>
+    <input type="text" name="to" placeholder="写给谁（比如：凤梨、猪哥）"><br>
+    <button type="submit">发送</button>
+  </form>
+</body>
+</html>
